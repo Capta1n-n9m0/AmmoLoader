@@ -3,7 +3,8 @@ Version: 2.1.0
 Date: 2026-07-10
 
   Update:
-    - Fork of Ammo Loader+ (SilentCrim) for Factorio 2.1
+    - Fork of Ammo Loader+ by SilentCrim (https://mods.factorio.com/mod/ammo-loader)
+    - Only compatibility fixes for Factorio 2.1 — no new features or gameplay changes
     - Published as ammoloader21 (incompatible with original ammo-loader mod)
     - Updated factorio_version and base dependency to 2.1
     - Fixed logistic chest animations for robot_door API

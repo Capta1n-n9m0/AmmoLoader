@@ -1,30 +1,50 @@
-# GitHub publish (one-time setup)
+# Publishing
 
-1. Log in to GitHub CLI:
-   ```powershell
-   gh auth login
-   ```
+Repository: https://github.com/ukaszstm/AmmoLoader
 
-2. Create the repository and push:
-   ```powershell
-   cd c:\Users\ukasz\projects\AmmoLoader
-   gh repo create ammoloader21 --public --description "Ammo Loader fork for Factorio 2.1" --source=. --remote=origin --push
-   ```
+## Package locally
 
-3. Create a release with the mod zip:
-   ```powershell
-   .\scripts\package.ps1
-   gh release create v2.1.0 dist\ammoloader21_2.1.0.zip --title "2.1.0" --notes "Initial Factorio 2.1 release"
-   ```
+```powershell
+.\scripts\package.ps1
+```
 
-# Factorio Mod Portal publish (one-time setup)
+```bash
+./scripts/package.sh
+```
+
+Output: `dist/ammoloader21_<version>.zip`
+
+## GitHub release (automated)
+
+Push a version tag to trigger the release workflow:
+
+```bash
+git tag v2.1.0
+git push origin v2.1.0
+```
+
+Or run **Actions → Release → Run workflow** manually to get a zip artifact.
+
+## Factorio Mod Portal
+
+### First-time publish
 
 1. Go to https://factorio.com/profile and create an API key with **Publish Mods** permission.
+2. Run:
 
-2. Publish:
-   ```powershell
-   $env:FACTORIO_TOKEN = "your-api-key-here"
-   .\scripts\publish-factorio.ps1
-   ```
+```powershell
+$env:FACTORIO_TOKEN = "your-api-key"
+.\scripts\publish-factorio.ps1
+```
 
-Alternatively upload manually at https://mods.factorio.com/mod/new
+Or upload manually at https://mods.factorio.com/mod/new with `dist/ammoloader21_2.1.0.zip`.
+
+Use the text from [MOD_DESCRIPTION.md](MOD_DESCRIPTION.md) as the mod description.
+
+### Subsequent releases
+
+Use the upload API (see [Mod upload API](https://wiki.factorio.com/Mod_upload_API)) or upload a new release zip on the mod page.
+
+## Required secrets (optional CI → Factorio)
+
+To auto-publish to the Factorio portal from GitHub Actions (like Maraxsis), add `FACTORIO_TOKEN` to repository secrets. The current workflow only packages and attaches the zip to GitHub Releases.

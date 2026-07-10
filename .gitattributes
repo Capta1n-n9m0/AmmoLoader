@@ -1,0 +1,24 @@
+* text=auto
+
+*.png binary
+*.jpg binary
+*.jpeg binary
+
+# Repository files excluded from release zip (see scripts/package.sh)
+README.md export-ignore
+LICENSE.md export-ignore
+Credits.md export-ignore
+FAQ.md export-ignore
+MOD_DESCRIPTION.md export-ignore
+PUBLISHING.md export-ignore
+.git export-ignore
+.github export-ignore
+.gitignore export-ignore
+.gitattributes export-ignore
+dist export-ignore
+scripts export-ignore
+ammoloader21/.gitignore export-ignore
+ammoloader21/config.ld export-ignore
+ammoloader21/console.txt export-ignore
+ammoloader21/luaFormatterConfig.ini export-ignore
+ammoloader21/regex.txt export-ignore

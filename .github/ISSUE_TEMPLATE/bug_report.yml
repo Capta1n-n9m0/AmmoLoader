@@ -1,0 +1,57 @@
+name: Bug Report
+description: Report a problem with AmmoLoader 2.1
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting a bug. Please include as much detail as possible.
+
+        **Note:** This is a fork of [Ammo Loader+](https://mods.factorio.com/mod/ammo-loader). Bugs that exist in the original 2.0 mod may need to be reported there too.
+
+  - type: input
+    id: factorio-version
+    attributes:
+      label: Factorio version
+      placeholder: e.g. 2.1.9
+    validations:
+      required: true
+
+  - type: input
+    id: mod-version
+    attributes:
+      label: AmmoLoader 2.1 version
+      placeholder: e.g. 2.1.0
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Enable mod ...
+        2. Place chest ...
+        3. See error ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: mods
+    attributes:
+      label: Other mods enabled
+      description: List other mods that might be relevant
+
+  - type: textarea
+    id: log
+    attributes:
+      label: Log / crash report
+      description: Paste relevant lines from factorio-current.log
