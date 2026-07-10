@@ -1,50 +1,76 @@
 # Publishing
 
-Repository: https://github.com/ukaszstm/AmmoLoader
+Repository: https://github.com/ukaszstm/AmmoLoader  
+Mod page: https://mods.factorio.com/mod/ammoloader21
 
-## Package locally
+## Workflow for a new release
+
+1. **Change the mod code** in `ammoloader21/`
+
+2. **Bump version** in `ammoloader21/info.json`:
+   ```json
+   "version": "2.1.2"
+   ```
+
+3. **Add changelog entry** at the top of `ammoloader21/changelog.txt` (Factorio format)
+
+4. **Test locally** — copy mod folder or zip to `%APPDATA%\Factorio\mods\`
+
+5. **Commit and tag** (optional but recommended):
+   ```powershell
+   git add .
+   git commit -m "Release 2.1.2"
+   git tag v2.1.2
+   git push origin master
+   git push origin v2.1.2
+   ```
+
+6. **Publish to Factorio Mod Portal**:
+   ```powershell
+   $env:FACTORIO_TOKEN = "your-api-key"
+   .\scripts\publish-factorio-update.ps1
+   ```
+
+   The update script automatically runs `package.ps1` first.
+
+7. **Wait ~5 minutes** — the new version appears in-game.
+
+---
+
+## Scripts
+
+| Script | When to use |
+|--------|-------------|
+| `package.ps1` | Build `dist/ammoloader21_<version>.zip` only |
+| `publish-factorio.ps1` | **First-time** mod registration (already done) |
+| `publish-factorio-update.ps1` | **Every subsequent release** |
+
+## API key permissions
+
+- First publish: **Publish Mods**
+- Updates: **Upload Mods** (same key usually has both)
+
+Create at https://factorio.com/profile
+
+## Manual upload (alternative)
+
+1. Run `.\scripts\package.ps1`
+2. Go to https://mods.factorio.com/mod/ammoloader21
+3. Upload `dist/ammoloader21_<version>.zip` under **Releases**
+
+## Updating mod description / FAQ
+
+Release upload only ships the zip. To change the portal description, edit it on the mod page or use the [Mod details API](https://wiki.factorio.com/Mod_details_API).
+
+## GitHub release (optional)
+
+Pushing a `v*` tag triggers `.github/workflows/release.yml` and attaches the zip to GitHub Releases.
 
 ```powershell
-.\scripts\package.ps1
+git tag v2.1.2
+git push origin v2.1.2
 ```
 
-```bash
-./scripts/package.sh
-```
+## Packaging note (Windows)
 
-Output: `dist/ammoloader21_<version>.zip`
-
-## GitHub release (automated)
-
-Push a version tag to trigger the release workflow:
-
-```bash
-git tag v2.1.0
-git push origin v2.1.0
-```
-
-Or run **Actions → Release → Run workflow** manually to get a zip artifact.
-
-## Factorio Mod Portal
-
-### First-time publish
-
-1. Go to https://factorio.com/profile and create an API key with **Publish Mods** permission.
-2. Run:
-
-```powershell
-$env:FACTORIO_TOKEN = "your-api-key"
-.\scripts\publish-factorio.ps1
-```
-
-Or upload manually at https://mods.factorio.com/mod/new with `dist/ammoloader21_2.1.0.zip`.
-
-Use the text from [MOD_DESCRIPTION.md](MOD_DESCRIPTION.md) as the mod description.
-
-### Subsequent releases
-
-Use the upload API (see [Mod upload API](https://wiki.factorio.com/Mod_upload_API)) or upload a new release zip on the mod page.
-
-## Required secrets (optional CI → Factorio)
-
-To auto-publish to the Factorio portal from GitHub Actions (like Maraxsis), add `FACTORIO_TOKEN` to repository secrets. The current workflow only packages and attaches the zip to GitHub Releases.
+Always use `package.ps1` (uses `tar.exe`). Do **not** use PowerShell `Compress-Archive` — Factorio rejects Windows-style backslashes in zips.
