@@ -1,4 +1,12 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.1
+Date: 2026-07-10
+
+  Bugfixes:
+    - Fix crash on save load: use minable_flag instead of read-only minable (Factorio 2.1 API)
+    - Fix hidden inserter control: use disabled_by_script instead of read-only active (Factorio 2.1 API)
+
+---------------------------------------------------------------------------------------------------
 Version: 2.1.0
 Date: 2026-07-10
 

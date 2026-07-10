@@ -770,9 +770,9 @@ function SL:setFilterItem(item)
     if isValid(insEnt) then
         insEnt.set_filter(1, item)
         if (not item) then
-            insEnt.active = false
+            insEnt.disabled_by_script = true
         else
-            insEnt.active = true
+            insEnt.disabled_by_script = false
         end
     end
     self._filterName = item
@@ -888,10 +888,10 @@ function SL:setProv(chestObj, item)
     end
     if (self._isProvided) and (not startedProvided) then
         force.providedSlots:pushleft(self)
-        if (isValid(insEnt)) then insEnt.active = false end
+        if (isValid(insEnt)) then insEnt.disabled_by_script = true end
     elseif (not self._isProvided) and (startedProvided) then
         force.providedSlots:softRemove(self)
-        if (isValid(insEnt)) then insEnt.active = true end
+        if (isValid(insEnt)) then insEnt.disabled_by_script = false end
     end
 end
 

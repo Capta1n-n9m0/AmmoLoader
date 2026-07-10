@@ -106,7 +106,7 @@ function HI.new(slotObj)
     newInserter.destructible = false
     newInserter.operable = false
     newInserter.rotatable = false
-    newInserter.minable = false
+    newInserter.minable_flag = false
     newInserter.inserter_stack_size_override = 1
     return newInserter
 end
