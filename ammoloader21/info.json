@@ -1,0 +1,13 @@
+{
+    "name": "ammoloader21",
+    "version": "2.1.0",
+    "factorio_version": "2.1",
+    "title": "AmmoLoader 2.1",
+    "author": "ukaszstm",
+    "homepage": "https://github.com/ukaszstm/ammoloader21",
+    "description": "Fork of Ammo Loader+ (by SilentCrim) updated for Factorio 2.1. Storage chests that automatically load turrets and vehicles with ammo and fuel.",
+    "dependencies": [
+        "base >= 2.1",
+        "! ammo-loader"
+    ]
+}
