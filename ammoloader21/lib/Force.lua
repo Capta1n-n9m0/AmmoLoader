@@ -334,22 +334,28 @@ function Force:getTechs()
     local useTech = gSets.useTech()
     for key, name in pairs(protoNames.tech) do
         local tech = forceTechs[name]
-        if not tech then return end
-        if (useTech) then
-            tech.enabled = true
-        else
-            tech.enabled = false
-        end
-        if (not tech.enabled) or (tech.researched) then
-            if (tech.name == protoNames.tech.loader) then
-                recipes[protoNames.chests.loader].enabled = true
-            elseif (tech.name == protoNames.tech.requester) then
-                recipes[protoNames.chests.requester].enabled = true
-                recipes[protoNames.chests.passiveProvider].enabled = true
-            elseif (tech.name == protoNames.tech.upgrade) then
-                recipes[protoNames.chests.storage].enabled = true
+        if tech then
+            if (useTech) then
+                tech.enabled = true
+            else
+                tech.enabled = false
             end
-            self.techs[name] = true
+            if (not tech.enabled) or (tech.researched) then
+                if (tech.name == protoNames.tech.loader) then
+                    local recipe = recipes[protoNames.chests.loader]
+                    if recipe then recipe.enabled = true end
+                elseif (tech.name == protoNames.tech.requester) then
+                    local requester = recipes[protoNames.chests.requester]
+                    local passive = recipes[protoNames.chests.passiveProvider]
+                    if requester then requester.enabled = true end
+                    if passive then passive.enabled = true end
+                elseif (tech.name == protoNames.tech.returnItems) or (tech.name == protoNames.tech.upgrade) then
+                    if recipes[protoNames.chests.storage] then
+                        recipes[protoNames.chests.storage].enabled = true
+                    end
+                end
+                self.techs[name] = true
+            end
         end
     end
     for techName, tech in pairs(forceTechs) do
@@ -363,37 +369,46 @@ function Force:getTechs()
 end
 
 function Force:isResearched(techName)
-    if (not gSets.useTech()) or (self.techs[techName]) then return true end
-    return false
+    if (not gSets.useTech()) then
+        return gSets.isTechFeatureEnabled(techName)
+    end
+    return self.techs[techName] or false
 end
 
 function Force:doUpgrade()
-    if (not gSets.doUpgrade()) or (not self:isResearched(protoNames.tech.upgrade)) then return false end
+    if (not gSets.featureUpgradeAmmo()) then return false end
+    if (not self:isResearched(protoNames.tech.upgrade)) then return false end
     return true
 end
 
-function Force:doVehicles()
-    if (self:isResearched(protoNames.tech.vehicles)) then return true end
-    return false
+function Force:doVehicleAmmo()
+    if (not gSets.featureVehicleAmmo()) or (not self:isResearched(protoNames.tech.vehicles)) then return false end
+    return true
 end
 
-function Force:doFuel()
-    if (self:isResearched(protoNames.tech.burners)) then return true end
-    return false
+function Force:doVehicleFuel()
+    if (not gSets.featureVehicleFuel()) or (not self:isResearched(protoNames.tech.vehicleFuel)) then return false end
+    return true
+end
+
+function Force:doTrainFuel()
+    if (not gSets.featureTrainFuel()) or (not self:isResearched(protoNames.tech.trainFuel)) then return false end
+    return true
 end
 
 function Force:doArtillery()
-    if (not gSets.doArtillery()) or (not self:isResearched(protoNames.tech.artillery)) then return false end
+    if (not gSets.featureArtillery()) or (not self:isResearched(protoNames.tech.artillery)) then return false end
     return true
 end
 
-function Force:doBurners()
-    if (not gSets.doBurners()) or (not self:isResearched(protoNames.tech.burners)) then return false end
+function Force:doBurnerStructures()
+    if (not gSets.featureBurnerStructures()) or (not self:isResearched(protoNames.tech.burners)) then return false end
     return true
 end
 
 function Force:doReturn()
-    if (not gSets.doReturn()) or (not self:isResearched(protoNames.tech.returnItems)) then return false end
+    if (not gSets.featureReturnItems()) then return false end
+    if (not self:isResearched(protoNames.tech.returnItems)) then return false end
     return true
 end
 

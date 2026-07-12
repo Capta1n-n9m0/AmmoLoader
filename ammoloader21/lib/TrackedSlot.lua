@@ -964,10 +964,17 @@ function SL:returnItems(forceReturn, slotStack, inserterStack)
             heldRemain.count = heldRemain.count - heldIns
         end
     end
+    local preferStorage = force:doReturn() and not forceReturn
+    if preferStorage then
+        stackRemain.count = force:sendToStorage(stackRemain).count
+        heldRemain.count = force:sendToStorage(heldRemain).count
+    end
     returnToChest(self:previousProvider())
     returnToChest(self:provider())
-    stackRemain.count = force:sendToStorage(stackRemain).count
-    heldRemain.count = force:sendToStorage(heldRemain).count
+    if not preferStorage then
+        stackRemain.count = force:sendToStorage(stackRemain).count
+        heldRemain.count = force:sendToStorage(heldRemain).count
+    end
     if (stackRemain.count + heldRemain.count <= 0) then
         clear()
         return stackRemain, heldRemain
@@ -1095,17 +1102,21 @@ function SL:slotType() return self._type or self:slotProto().type end
 function SL:checkEnabled()
     local enabled = true
     local force = self:force()
-    local type = self:slotType()
-    if (type == "fuel") and (not force:doFuel()) then
+    local slotType = self:slotType()
+    local ent = self.ent
+
+    if (self:hasCategory() == "artillery-shell") and (not force:doArtillery()) then
         enabled = false
-    elseif (type == "fuel") and (not self:canMove()) and (not force:doBurners()) then
-        enabled = false
-    elseif (self:hasCategory() == "artillery-shell") and (not force:doArtillery()) then
-        enabled = false
-    elseif ((self.ent.type == "car") or (self.ent.type == "locomotive")) and (not force:doVehicles()) then
-        enabled = false
-    elseif (self.ent.type == "locomotive") and (not gSets.doTrains()) then
-        enabled = false
+    elseif (slotType == "fuel") then
+        if (ent.type == "locomotive") then
+            if (not force:doTrainFuel()) then enabled = false end
+        elseif (self:canMove()) then
+            if (not force:doVehicleFuel()) then enabled = false end
+        elseif (not force:doBurnerStructures()) then
+            enabled = false
+        end
+    elseif ((ent.type == "car") or (ent.type == "locomotive") or (ent.type == "spider-vehicle")) and (slotType ~= "fuel") then
+        if (not force:doVehicleAmmo()) then enabled = false end
     end
     return enabled
 end

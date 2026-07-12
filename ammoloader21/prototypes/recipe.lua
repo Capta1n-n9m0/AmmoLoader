@@ -1,5 +1,6 @@
 local names = require("prototypes.names")
 local util = require("prototypes.util")
+local features = require("prototypes.features")
 
 local tempIronChest = data.raw["recipe"]["iron-chest"]
 if (not tempIronChest) then
@@ -49,73 +50,69 @@ recipes.ammoLoader =
         }
     }
 )
-recipes.requester1 =
-    util.modifiedEnt(
-    data.raw["recipe"]["requester-chest"],
-    {
-        type = "recipe",
-        name = names.chests.requester,
-        enabled = startEnabled,
-        energy_required = 2,
-        results = singleItemResultTable(names.chests.requester, 1),
-        icon = util.filePath(names.chests.requester, "icon"),
-        icon_size = 32,
-    },
-    {
-        ingredients = {
-            {type = "item", name = "requester-chest", amount = 2},
-            {type = "item", name = filterInserterName, amount = 5}
-        }
-    }
-)
-recipes.storage =
-    util.modifiedEnt(
-    data.raw["recipe"]["storage-chest"],
-    {
-        type = "recipe",
-        name = names.chests.storage,
-        enabled = startEnabled,
-        results = singleItemResultTable(names.chests.storage, 1),
-        icon = util.filePath(names.chests.storage, "icon"),
-        icon_size = 32,
-    },
-    {
-        ingredients = {
-            {type = "item", name = "wooden-chest", amount = 10},
-            chestIngredient
-        }
-    }
-)
-recipes.passiveProvider =
-    util.modifiedEnt(
-    data.raw["recipe"]["passive-provider-chest"],
-    {
-        type = "recipe",
-        name = names.chests.passiveProvider,
-        enabled = startEnabled,
-        energy_required = 2,
-        results = singleItemResultTable(names.chests.passiveProvider, 1),
-        icon = util.filePath(names.chests.passiveProvider, "icon"),
-        icon_size = 32,
-    },
-    {
-        ingredients = {
-            {type = "item", name = "passive-provider-chest", amount = 2},
-            {type = "item", name = filterInserterName, amount = 5},
-        }
-    }
-)
--- recipes.testAmmo = {
---     type = "recipe",
---     name = "testAmmo",
---     enabled = true,
---     energy_required = 1,
---     result = "testAmmo",
---     ingredients = {
---         {"iron-plate", 1}
---     }
--- }
 
-for k, v in pairs(recipes) do
+if features.logistics() then
+    recipes.requester1 =
+        util.modifiedEnt(
+        data.raw["recipe"]["requester-chest"],
+        {
+            type = "recipe",
+            name = names.chests.requester,
+            enabled = startEnabled,
+            energy_required = 2,
+            results = singleItemResultTable(names.chests.requester, 1),
+            icon = util.filePath(names.chests.requester, "icon"),
+            icon_size = 32,
+        },
+        {
+            ingredients = {
+                {type = "item", name = "requester-chest", amount = 2},
+                {type = "item", name = filterInserterName, amount = 5}
+            }
+        }
+    )
+    recipes.passiveProvider =
+        util.modifiedEnt(
+        data.raw["recipe"]["passive-provider-chest"],
+        {
+            type = "recipe",
+            name = names.chests.passiveProvider,
+            enabled = startEnabled,
+            energy_required = 2,
+            results = singleItemResultTable(names.chests.passiveProvider, 1),
+            icon = util.filePath(names.chests.passiveProvider, "icon"),
+            icon_size = 32,
+        },
+        {
+            ingredients = {
+                {type = "item", name = "passive-provider-chest", amount = 2},
+                {type = "item", name = filterInserterName, amount = 5},
+            }
+        }
+    )
+end
+
+if features.returnItems() or features.upgradeAmmo() then
+    recipes.storage =
+        util.modifiedEnt(
+        data.raw["recipe"]["storage-chest"],
+        {
+            type = "recipe",
+            name = names.chests.storage,
+            enabled = startEnabled,
+            results = singleItemResultTable(names.chests.storage, 1),
+            icon = util.filePath(names.chests.storage, "icon"),
+            icon_size = 32,
+        },
+        {
+            ingredients = {
+                {type = "item", name = "wooden-chest", amount = 10},
+                chestIngredient
+            }
+        }
+    )
+end
+
+for _, v in pairs(recipes) do
     data:extend {v}
 end

@@ -14,6 +14,14 @@ require("prototypes.RangeExtender")
 
 local util = require "util"
 
+local function setTechIcon(techName)
+    local tech = data.raw.technology[techName]
+    if tech then
+        tech.icon_size = 128
+        tech.icon = "__ammoloader21__/graphics/icon/technology.png"
+    end
+end
+
 local function set_robot_door_animation(chest, animation)
     chest.robot_door = chest.robot_door or {}
     chest.robot_door.animation = animation
@@ -62,8 +70,7 @@ chestIt.icon = "__ammoloader21__/graphics/icon/chest.png" -- иконка
 chestIt.icon_size = 64                                   -- размер иконки
 data:extend({ chestIt })
 
-data.raw["technology"]["ammo-loader-tech-loader-chest"].icon_size = 128
-data.raw["technology"]["ammo-loader-tech-loader-chest"].icon = "__ammoloader21__/graphics/icon/technology.png"
+setTechIcon("ammo-loader-tech-loader-chest")
 
 --========================СУНДУК ЗАПРОСА=========================--
 
@@ -106,8 +113,7 @@ chestreqIt.icon = "__ammoloader21__/graphics/icon/chest_b.png" -- иконка
 chestreqIt.icon_size = 64                                     -- размер иконки
 data:extend({ chestreqIt })
 
-data.raw["technology"]["ammo-loader-tech-requester-chest"].icon_size = 128
-data.raw["technology"]["ammo-loader-tech-requester-chest"].icon = "__ammoloader21__/graphics/icon/technology.png"
+setTechIcon("ammo-loader-tech-requester-chest")
 
 --========================СУНДУК ХРАНЕНИЯ=========================--
 
@@ -150,8 +156,7 @@ cheststorIt.icon = "__ammoloader21__/graphics/icon/chest_y.png" -- иконка
 cheststorIt.icon_size = 64                                     -- размер иконки
 data:extend({ cheststorIt })
 
-data.raw["technology"]["ammo-loader-tech-requester-chest"].icon_size = 128
-data.raw["technology"]["ammo-loader-tech-requester-chest"].icon = "__ammoloader21__/graphics/icon/technology.png"
+setTechIcon("ammo-loader-tech-return-items")
 
 --========================СУНДУК ПАССИВНОГО СНАБЖЕНИЯ=========================--
 
@@ -195,19 +200,10 @@ chestpassivIt.icon_size = 64                                     -- размер
 data:extend({ chestpassivIt })
 
 --========================ТЕХНОЛОГИИ=========================--
---НА НИХ МОЖНО ВООБЩЕ ОДНУ КАРТИНКУ
---ЗАПРАВКА ТРАНСПОРТА
-data.raw["technology"]["ammo-loader-tech-vehicles"].icon_size = 128
-data.raw["technology"]["ammo-loader-tech-vehicles"].icon = "__ammoloader21__/graphics/icon/technology.png"
---ЗАПРАВКА ТОПЛИВОМ
-data.raw["technology"]["ammo-loader-tech-burners"].icon_size = 128
-data.raw["technology"]["ammo-loader-tech-burners"].icon = "__ammoloader21__/graphics/icon/technology.png"
---ЗАРЯДКА АРТИЛЕРИЙ
-data.raw["technology"]["ammo-loader-tech-artillery"].icon_size = 128
-data.raw["technology"]["ammo-loader-tech-artillery"].icon = "__ammoloader21__/graphics/icon/technology.png"
---КАКОЕ - ТО ОБНОВЛЕНИЕ
-data.raw["technology"]["ammo-loader-tech-upgrade"].icon_size = 128
-data.raw["technology"]["ammo-loader-tech-upgrade"].icon = "__ammoloader21__/graphics/icon/technology.png"
---ВОЗВРАТ ПРЕДМЕТОВ
-data.raw["technology"]["ammo-loader-tech-return-items"].icon_size = 128
-data.raw["technology"]["ammo-loader-tech-return-items"].icon = "__ammoloader21__/graphics/icon/technology.png"
+setTechIcon("ammo-loader-tech-vehicles")
+setTechIcon("ammo-loader-tech-vehicle-fuel")
+setTechIcon("ammo-loader-tech-train-fuel")
+setTechIcon("ammo-loader-tech-burners")
+setTechIcon("ammo-loader-tech-artillery")
+setTechIcon("ammo-loader-tech-upgrade")
+setTechIcon("ammo-loader-tech-return-items")

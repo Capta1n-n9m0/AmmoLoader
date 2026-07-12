@@ -41,10 +41,68 @@ gSets.requireUpdate = {
     ammo_loader_enabled = true,
     ammo_loader_performance_mode = true
 }
-gSets.requireUpdate[protoNames.settings.doBurerStructures] = true
-gSets.requireUpdate[protoNames.settings.doArtillery] = true
-gSets.requireUpdate[protoNames.settings.doTrains] = true
-gSets.requireUpdate[protoNames.settings.crossSurfaces] = true
+
+local function startupFeature(name)
+    local set = settings.startup[name]
+    if set then
+        return set.value
+    end
+    return false
+end
+
+function gSets.featureArtillery()
+    return startupFeature(protoNames.settings.featureArtillery)
+end
+
+function gSets.featureVehicleAmmo()
+    return startupFeature(protoNames.settings.featureVehicleAmmo)
+end
+
+function gSets.featureVehicleFuel()
+    return startupFeature(protoNames.settings.featureVehicleFuel)
+end
+
+function gSets.featureTrainFuel()
+    return startupFeature(protoNames.settings.featureTrainFuel)
+end
+
+function gSets.featureBurnerStructures()
+    return startupFeature(protoNames.settings.featureBurnerStructures)
+end
+
+function gSets.featureLogistics()
+    return startupFeature(protoNames.settings.featureLogistics)
+end
+
+function gSets.featureReturnItems()
+    return startupFeature(protoNames.settings.featureReturnItems)
+end
+
+function gSets.featureUpgradeAmmo()
+    return startupFeature(protoNames.settings.featureUpgradeAmmo)
+end
+
+function gSets.crossSurfaces()
+    return startupFeature(protoNames.settings.crossSurfaces)
+end
+
+function gSets.isTechFeatureEnabled(techName)
+    local techFeatures = {
+        [protoNames.tech.loader] = true,
+        [protoNames.tech.requester] = gSets.featureLogistics,
+        [protoNames.tech.vehicles] = gSets.featureVehicleAmmo,
+        [protoNames.tech.vehicleFuel] = gSets.featureVehicleFuel,
+        [protoNames.tech.trainFuel] = gSets.featureTrainFuel,
+        [protoNames.tech.burners] = gSets.featureBurnerStructures,
+        [protoNames.tech.artillery] = gSets.featureArtillery,
+        [protoNames.tech.returnItems] = gSets.featureReturnItems,
+        [protoNames.tech.upgrade] = gSets.featureUpgradeAmmo,
+    }
+    local check = techFeatures[techName]
+    if check == true then return true end
+    if type(check) == "function" then return check() end
+    return false
+end
 
 function gSets.update()
     local c = {}
@@ -106,11 +164,11 @@ function gSets.maxSlotsPerChestTick() return 5 end
 
 gSets.maxReturnSlots = 10
 
-function gSets.doArtillery() return storage["settings_cache"]["ammo_loader_fill_artillery"] end
+function gSets.doArtillery() return gSets.featureArtillery() end
 
-function gSets.doBurners() return storage["settings_cache"]["ammo_loader_fill_burner_structures"] end
+function gSets.doBurners() return gSets.featureBurnerStructures() end
 
-function gSets.doTrains() return storage["settings_cache"]["ammo_loader_fill_locomotives"] end
+function gSets.doTrains() return gSets.featureTrainFuel() end
 
 function gSets.enabled() return storage["settings_cache"]["ammo_loader_enabled"] end
 
@@ -165,9 +223,13 @@ function gSets.slotProvideInterval() return 60 end
 --     -- return gSets.slotsPerCycle()
 -- end
 
-function gSets.doReturn() return storage["settings_cache"]["ammo_loader_return_items"] end
+function gSets.doReturn()
+    return gSets.featureReturnItems()
+end
 
-function gSets.doUpgrade() return storage["settings_cache"]["ammo_loader_upgrade_ammo"] end
+function gSets.doUpgrade()
+    return gSets.featureUpgradeAmmo()
+end
 
 function gSets.maxIndicatorsPerTick() return 10 end
 

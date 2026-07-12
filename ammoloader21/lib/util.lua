@@ -229,7 +229,7 @@ end
 function util.isInRange(slot, chest)
     local rad = gSets.chestRadius()
     if (rad <= 0) then
-        if (not gSets.refs[protoNames.settings.crossSurfaces]) and (slot:surfaceName() ~= chest:surfaceName()) then
+        if (not gSets.crossSurfaces()) and (slot:surfaceName() ~= chest:surfaceName()) then
             return false
         end
         return true

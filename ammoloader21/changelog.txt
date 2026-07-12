@@ -1,4 +1,22 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.2.0
+Date: 2026-07-11
+
+  Features:
+    - Startup feature toggles control which researches appear in the tech tree
+    - Split fuel loading into Vehicle Fuel, Train Fuel, and Burner Structures
+    - Return Items prefers Storage Loader Chests when returning surplus ammo/fuel
+    - Removed duplicate Map settings (Return Items, Upgrade ammo, Provide across surfaces) — use Startup Feature toggles instead
+    - Removed old runtime fill toggles (Artillery/Locomotives/Burners)
+
+  Notes:
+    - Feature settings require a new game or map reset to hide researches
+
+  Bugfixes:
+    - Fix crash when disabling optional features at startup (missing technology icons in data-updates.lua)
+    - Fix mod technologies missing science-pack prerequisites (e.g. Upgrade researchable before Military science)
+
+---------------------------------------------------------------------------------------------------
 Version: 2.1.1
 Date: 2026-07-10
 
