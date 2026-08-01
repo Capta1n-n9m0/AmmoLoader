@@ -102,6 +102,20 @@ end
 
 table.equals = util.tableEquals
 
+---Resolve an item name from Factorio 2.x filter / ItemID values.
+---storage_filter reads as ItemIDAndQualityIDPair where .name is a LuaItemPrototype.
+---@param filter any
+---@return string|nil
+function util.itemNameFromFilter(filter)
+    if not filter then return nil end
+    if type(filter) == "string" then return filter end
+    local name = filter.name
+    if type(name) == "string" then return name end
+    if name and type(name) == "userdata" and name.name then return name.name end
+    if name and type(name) == "table" and name.name then return name.name end
+    return nil
+end
+
 ---Check an object to see if it is an empty LuaItemStack or SimpleItemStack.
 ---@param stack LuaItemStack | ItemStack
 ---@return boolean

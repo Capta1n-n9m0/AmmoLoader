@@ -776,23 +776,23 @@ function Force:sendToStorage(stack, slot, pos, forceReturn)
     }
 
     for chest in self:iterChests(nil, nil, iterOpts) do
-        local filter = nil
-        if (chest:isStorage()) then filter = chest.ent.storage_filter end
+        local filterName = nil
+        if (chest:isStorage()) then
+            filterName = util.itemNameFromFilter(chest.ent.storage_filter)
+        end
         local inv = chest:inv()
-        if (not filter) and (not bestChest.chest) then
+        if (not filterName) and (not bestChest.chest) then
             if (inv.can_insert(stack)) then
                 bestChest.chest = chest
                 bestChest.filterMatch = false
             end
-        elseif (filter) and (filter.name == stack.name) and ((not bestChest.chest) or (not bestChest.filterMatch)) then
+        elseif (filterName) and (filterName == stack.name) and ((not bestChest.chest) or (not bestChest.filterMatch)) then
             if (inv.can_insert(stack)) then
                 bestChest.chest = chest
                 bestChest.filterMatch = true
                 break
             end
         end
-        -- if (not filter) or (filter == stack.name) then
-        -- end
     end
     if (not bestChest.chest) then
         -- if (forceReturn) then

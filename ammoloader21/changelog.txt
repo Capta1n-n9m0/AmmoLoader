@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.2.1
+Date: 2026-08-01
+
+  Bugfixes:
+    - Fix Storage Chest logistic filter matching for Factorio 2.1 (storage_filter.name is LuaItemPrototype, not string)
+
+---------------------------------------------------------------------------------------------------
 Version: 2.2.0
 Date: 2026-07-11
 
