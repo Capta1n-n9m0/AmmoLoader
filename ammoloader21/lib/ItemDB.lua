@@ -18,6 +18,13 @@ ItemDB.types.ammo = "ammo"
 ItemDB.types.any = "any"
 ItemDB.types.repair = "repair"
 
+-- Factorio 2.1.20 replaced LuaItemPrototype.fuel_category with fuel_categories (array, nil when empty).
+-- The loader groups fuels by one category, so use the first one.
+function ItemDB.fuelCategory(proto)
+    local cats = proto.fuel_categories
+    return cats and cats[1] or nil
+end
+
 ItemDB.radiusWeight = 0.3
 ItemDB.damageTypeWeights = {}
 -- ItemDB.damageTypeWeights = {explosion = 1.05, fire = 1.1, poison = 0.9, laser = 1.05}
@@ -152,8 +159,8 @@ function ItemDB.newItem(name)
         -- cInform(ammoType)
         obj.category = ammoCat
         obj.type = ItemDB.types.ammo
-    elseif (proto.fuel_category) then
-        obj.category = proto.fuel_category
+    elseif (ItemDB.fuelCategory(proto)) then
+        obj.category = ItemDB.fuelCategory(proto)
         obj.type = ItemDB.types.fuel
     end
 
@@ -262,7 +269,7 @@ function ItemDB.newFuel(proto)
     if (not proto) or (ItemDB.items()[proto.name]) then return nil end
     local obj = {} ---@type alItem
     obj.name = proto.name
-    obj.category = proto.fuel_category
+    obj.category = ItemDB.fuelCategory(proto)
     if (not obj.category) then return end
     if (obj.category == "processed-chemical") then obj.category = "chemical" end
     obj.type = ItemDB.types.fuel
@@ -431,7 +438,7 @@ function ItemDB.getItemScore(name)
     -- local itemType = ItemDB.getType(name)
     local proto = prototypes.item[name]
     -- local types = ItemDB.types
-    if (proto.fuel_category) then
+    if (ItemDB.fuelCategory(proto)) then
         return proto.fuel_value
     elseif (proto.get_ammo_type()) then
         return ItemDB.getTotalDamage(name)
@@ -447,7 +454,7 @@ function ItemDB.getType(name)
     if not proto then return nil end
     local ammoType = proto.get_ammo_type()
     if (ammoType) then return "ammo" end
-    local fuelCat = proto.fuel_category
+    local fuelCat = ItemDB.fuelCategory(proto)
     if (fuelCat) then return "fuel" end
     return nil
 end
